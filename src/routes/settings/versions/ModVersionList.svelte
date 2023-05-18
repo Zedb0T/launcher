@@ -83,7 +83,7 @@
         <p>Jak 1 Mods - {Object.keys(modFile.games.jak1).length}</p>
         <select class="custom-select" id="modSelect" on:change={handleOptionSelected}>
           {#each Object.keys(modFile.games.jak1) as modName}
-            <option value={modName}>{modName}</option>
+            <option value={modName}>{getModData(modName).displayName}</option>
           {/each}
         </select>
       </div>
