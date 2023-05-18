@@ -41,6 +41,7 @@ export async function getInstallationDirectory(): Promise<string | null> {
   }
 }
 
+
 export async function getJak1MoviePath(): Promise<string | null> {
   try {
     return await invoke("get_jak1_movie_directory", {});
@@ -221,19 +222,19 @@ export async function setLocale(locale_string: string): Promise<void> {
   }
 }
 
-export async function setBypassRequirements(bypass: boolean): Promise<void> {
-  try {
-    await invoke("set_bypass_requirements", { bypass: bypass });
-  } catch (e) {
-    exceptionLog("Unable to set bypress requirements", e);
-  }
-}
+// export async function setBypassRequirements(bypass: boolean): Promise<void> {
+//   try {
+//     await invoke("set_bypass_requirements", { bypass: bypass });
+//   } catch (e) {
+//     exceptionLog("Unable to set bypress requirements", e);
+//   }
+// }
 
-export async function getBypassRequirements(): Promise<boolean> {
-  try {
-    return await invoke("get_bypass_requirements", {});
-  } catch (e) {
-    exceptionLog("Unable to get bypress requirements setting", e);
-    return false;
-  }
-}
+// export async function getBypassRequirements(): Promise<boolean> {
+//   try {
+//     return await invoke("get_bypass_requirements", {});
+//   } catch (e) {
+//     exceptionLog("Unable to get bypress requirements setting", e);
+//     return false;
+//   }
+// }

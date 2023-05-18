@@ -119,6 +119,7 @@ pub struct LauncherConfig {
   pub jak2_movie_dir: Option<String>,
   pub active_version: Option<String>,
   pub active_version_folder: Option<String>,
+  pub locale: Option<String>,
 }
 
 
@@ -159,6 +160,7 @@ impl LauncherConfig {
       jak2_movie_dir: None,
       active_version: None,
       active_version_folder: Some("official".to_string()),
+     locale: None,
     }
   }
 
@@ -408,6 +410,11 @@ impl LauncherConfig {
     Ok(())
   }
 
+  pub fn set_locale(&mut self, new_locale: String) -> Result<(), ConfigError> {
+    self.locale = Some(new_locale);
+    self.save_config()?;
+    Ok(())
+  }
   // TODO - this pattern isn't great.  It's made awkward by trying to be backwards compatible
   // with the old format though
   //

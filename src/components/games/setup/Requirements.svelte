@@ -4,7 +4,7 @@
   import {
     isAVXRequirementMet,
     isOpenGLRequirementMet,
-    setBypassRequirements,
+
   } from "$lib/rpc/config";
   import { _ } from "svelte-i18n";
   import { confirm } from "@tauri-apps/api/dialog";
@@ -103,20 +103,6 @@
         dispatch("recheckRequirements");
       }}>{$_("requirements_button_recheck")}</Button
     >
-    <Button
-      btnClass="border-solid border-2 border-slate-900 rounded bg-orange-800 hover:bg-slate-800 text-sm text-white font-semibold px-5 py-2"
-      on:click={async () => {
-        const confirmed = await confirm(
-          `${$_("requirements_button_bypass_warning_1")}\n\n${$_(
-            "requirements_button_bypass_warning_2"
-          )}`,
-          { title: "OpenGOAL Launcher", type: "warning" }
-        );
-        if (confirmed) {
-          await setBypassRequirements(true);
-          dispatch("recheckRequirements");
-        }
-      }}>{$_("requirements_button_bypass")}</Button
-    >
+
   </div>
 </div>

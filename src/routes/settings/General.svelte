@@ -1,11 +1,9 @@
 <script lang="ts">
   import { AVAILABLE_LOCALES } from "$lib/i18n/i18n";
   import {
-    getBypassRequirements,
     getInstallationDirectory,
     getLocale,
     resetLauncherSettingsToDefaults,
-    setBypassRequirements,
     setLocale,
   } from "$lib/rpc/config";
   import { getActiveVersion, getActiveVersionFolder } from "$lib/rpc/versions";
@@ -17,7 +15,7 @@
   let currentInstallationDirectory = "";
   let currentLocale;
   let availableLocales = [];
-  let currentBypassRequirementsVal = false;
+
 
   onMount(async () => {
     currentInstallationDirectory = await getInstallationDirectory();
@@ -31,7 +29,7 @@
       ];
     }
     currentLocale = await getLocale();
-    currentBypassRequirementsVal = await getBypassRequirements();
+
   });
 </script>
 
@@ -60,13 +58,7 @@
     >
   </div>
   <div>
-    <Toggle
-      checked={currentBypassRequirementsVal}
-      on:change={async (evt) => {
-        await setBypassRequirements(evt.target.checked);
-        currentBypassRequirementsVal = await getBypassRequirements();
-      }}>{$_("settings_general_toggle_bypassRequirementsCheck")}</Toggle
-    >
+
   </div>
   <div>
     <Button
