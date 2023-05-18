@@ -1,0 +1,499 @@
+{
+  "games": {
+    "jak1": {
+      "Ng_minus": {
+        "internalName": "Ng_minus",
+        "url": "https://github.com/OpenGOAL-Unofficial-Mods/ng-",
+        "contributors": [
+          "ZedB0T",
+          "PrinceVortex"
+        ],
+        "description": "Play the game backwards",
+        "displayName": "NG-",
+        "releaseDate": "2023-04-16",
+        "tags": [
+          "gameplay-mod"
+        ],
+        "websiteUrl": "https://github.com/OpenGOAL-Unofficial-Mods/ng-",
+        "modImage": "https://github.com/OpenGOAL-Unofficial-Mods/ng-/blob/main/ModImage.png?raw=true"
+      },
+      "blindfold_assist": {
+        "internalName": "blindfold_assist",
+        "url": "https://github.com/OpenGOAL-Unofficial-Mods/blindfold-assist",
+        "contributors": [
+          "barg034"
+        ],
+        "description": "Mod for blindfolded runs. Limits stick input to 8 directions. Hold R2 to center camera behind Jak.",
+        "displayName": "Blindfold Assist Mod",
+        "releaseDate": "2023-01-22",
+        "tags": [
+          "gameplay-mod",
+          "beta"
+        ],
+        "websiteUrl": "https://github.com/OpenGOAL-Unofficial-Mods/blindfold-assist/blob/main/README.md",
+        "modImage": "https://github.com/OpenGOAL-Unofficial-Mods/blindfold-assist/blob/main/ModImage.png?raw=true"
+      },
+      "classic_plus": {
+        "internalName": "classic_plus",
+        "url": "https://github.com/Zedb0T/Zed-Mods/tree/Classic+-Release",
+        "contributors": [
+          "ZedB0T"
+        ],
+        "description": "Mimicks PS2 Jak 1 speedrun behavior with some openGOAL QoL improvements. However runs are NOT valid for the leaderboard.",
+        "displayName": "Classic+",
+        "releaseDate": "2022-08-30",
+        "tags": [
+          "speedrunning"
+        ],
+        "websiteUrl": "https://github.com/Zedb0T/Zed-Mods/tree/Classic+-Release",
+        "modImage": "https://github.com/Zedb0T/Zed-Mods/blob/Classic+-Release/ModImage.png?raw=true"
+      },
+      "randomizer": {
+        "displayName": "Checkpoint Randomizer",
+        "desc": "Warp to a random checkpoint on various triggers (cells, flies, orbs, eco, death).",
+        "contributors": [
+          "ZedB0T",
+          "MikeGamePro",
+          "barg034"
+        ],
+        "tags": [
+          "gameplay-mod",
+          "rng",
+          "challenge"
+        ],
+        "release_date": "2022-08-28",
+        "URL": "https://github.com/OpenGOAL-Unofficial-Mods/opengoal-randomizer-mod-pack/tree/main",
+        "website_url": "https://github.com/OpenGOAL-Unofficial-Mods/opengoal-randomizer-mod-pack",
+        "videos_url": "https://www.youtube.com/watch?v=B5mEhVt0v68"
+      },
+      "random_actor_scale": {
+        "displayName": "Fricked up",
+        "desc": "PAUSERS",
+        "contributors": [
+          "ZedB0T"
+        ],
+        "tags": [
+          "beta",
+          "gameplay-mod",
+          "challenge",
+          "rng"
+        ],
+        "release_date": "2023-01-19",
+        "URL": "https://github.com/OpenGOAL-Unofficial-Mods/opengoal-mod-base/tree/fucked",
+        "website_url": "https://github.com/OpenGOAL-Unofficial-Mods/opengoal-mod-base"
+      },
+      "local_multi": {
+        "displayName": "Shared Screen Multiplayer! (beta) ",
+        "desc": "Shared-screen multiplayer. Press L1 + L2 + R1 + R2 at the same time on another controller to have another player join!",
+        "contributors": [
+          "ZedB0T",
+          "barg034"
+        ],
+        "tags": [
+          "gameplay-mod",
+          "rng",
+          "multiplayer",
+          "beta"
+        ],
+        "release_date": "2022-09-05",
+        "URL": "https://github.com/OpenGOAL-Unofficial-Mods/opengoal-multiplayer-rando-mod-pack/tree/main",
+        "website_url": "https://github.com/OpenGOAL-Unofficial-Mods/opengoal-multiplayer-rando-mod-pack/blob/main/README.md#opengoal-multiplayer--randomizer-mod-pack",
+        "videos_url": "https://www.youtube.com/watch?v=BeVl4x6gjC0"
+      },
+      "random_cell_order": {
+        "displayName": "Random Cell Order",
+        "desc": "Jak 1 but you must pick up cells in the (random) specified order",
+        "contributors": [
+          "barg034",
+          "SixRock",
+          "Dexz"
+        ],
+        "tags": [
+          "beta",
+          "speedrunning",
+          "rng"
+        ],
+        "release_date": "2023-02-02",
+        "URL": "https://github.com/OpenGOAL-Unofficial-Mods/opengoal-rco",
+        "website_url": "https://github.com/OpenGOAL-Unofficial-Mods/opengoal-rco/blob/main/README.md"
+      },
+      "speedrun_practice": {
+        "displayName": "Speedrun practice mod",
+        "desc": "Extra speedrun trick checkpoints. Custom checkpoints: L2 + down to set / L2 + up to respawn",
+        "contributors": [
+          "ZedB0T",
+          "barg034"
+        ],
+        "tags": [
+          "speedrunning",
+          "practice"
+        ],
+        "release_date": "2022-10-23",
+        "URL": "https://github.com/OpenGOAL-Unofficial-Mods/Jakspeedrunningpractice",
+        "website_url": "https://github.com/OpenGOAL-Unofficial-Mods/Jakspeedrunningpractice/blob/main/README.md#jak-speedrunning-practice-opengoal",
+        "videos_url": "https://www.youtube.com/watch?v=a_SIccmgpj4"
+      },
+      "microtransactions": {
+        "displayName": "MicroTransactions",
+        "desc": "Unlock Jak's moveset with orbs!",
+        "contributors": [
+          "HimHam"
+        ],
+        "tags": [
+          "gameplay-mod",
+          "challenge"
+        ],
+        "release_date": "2022-08-28",
+        "URL": "https://github.com/himham-jak/Jak1-but-Microtransactions/releases",
+        "website_url": "https://github.com/himham-jak/Jak1-but-Microtransactions/blob/microtransactions/README.md",
+        "videos_url": "https://www.youtube.com/watch?v=q5TZ9U399J8"
+      },
+      "jak_go_fast": {
+        "displayName": "Jak1 but every power cell he gets faster",
+        "desc": "Seems pretty self-explanatory to me.",
+        "contributors": [
+          "HimHam"
+        ],
+        "tags": [
+          "gameplay-mod",
+          "challenge"
+        ],
+        "release_date": "2022-08-30",
+        "URL": "https://github.com/himham-jak/Jak-1-Movement-Mod/releases"
+      },
+      "first_person": {
+        "displayName": "First Person Mode",
+        "desc": "Play the whole game from Jak's POV.",
+        "contributors": [
+          "ZedB0T"
+        ],
+        "tags": [
+          "gameplay-mod",
+          "challenge"
+        ],
+        "release_date": "2022-09-30",
+        "URL": "https://github.com/OpenGOAL-Unofficial-Mods/First-person-jak",
+        "website_url": "https://github.com/OpenGOAL-Unofficial-Mods/First-person-jak",
+        "videos_url": "https://www.youtube.com/watch?v=2RhxWSSaNlM"
+      },
+      "flutflut_legacy": {
+        "displayName": "The FlutFlut Legacy",
+        "desc": "Play the whole game on FlutFlut.",
+        "contributors": [
+          "ZedB0T",
+          "barg034"
+        ],
+        "tags": [
+          "gameplay-mod",
+          "challenge"
+        ],
+        "release_date": "2022-09-10",
+        "URL": "https://github.com/OpenGOAL-Unofficial-Mods/flutflut-legacy",
+        "website_url": "https://github.com/Zedb0T/TheFlutFlutLegacy",
+        "videos_url": "https://www.youtube.com/watch?v=_z8GhVWFYfI"
+      },
+      "ice_everywhere": {
+        "displayName": "Ice Everywhere",
+        "desc": "Slippery ice physics on all surfaces.",
+        "contributors": [
+          "ZedB0T"
+        ],
+        "tags": [
+          "gameplay-mod",
+          "challenge"
+        ],
+        "release_date": "2022-08-28",
+        "URL": "https://github.com/Zedb0T/iceverywhere/releases",
+        "website_url": "https://github.com/Zedb0T/iceverywhere"
+      },
+      "orb_hunt": {
+        "displayName": "Orb Hunt",
+        "desc": "Jak 1 but everything is all moved around! More info on the website",
+        "contributors": [
+          "barg034"
+        ],
+        "tags": [
+          "gameplay-mod",
+          "challenge"
+        ],
+        "release_date": "2023-01-05",
+        "URL": "https://github.com/dallmeyer/opengoal-orbhunt",
+        "website_url": "https://github.com/dallmeyer/opengoal-orbhunt/blob/main/README.md#opengoal---the-precursor-orb-hunt",
+        "videos_url": "https://www.youtube.com/playlist?list=PLcFimep6cyLekygymgefmPqusnFYETuyb"
+      },
+      "super_mario_64": {
+        "displayName": "The SM64 Legacy",
+        "desc": "Plays similar to Super Mario 64 (stars->cells, red coins->scout flies, coins->orbs)",
+        "contributors": [
+          "barg034"
+        ],
+        "tags": [
+          "gameplay-mod",
+          "challenge",
+          "texture-mod"
+        ],
+        "release_date": "2022-10-28",
+        "URL": "https://github.com/dallmeyer/opengoal-sm64",
+        "website_url": "https://github.com/dallmeyer/opengoal-sm64/blob/main/README.md#opengoal-jak-1---super-mario-64-style",
+        "videos_url": "https://www.youtube.com/watch?v=xNpsAzsPBTQ"
+      },
+      "zoomer_legacy": {
+        "displayName": "The Zoomer Legacy",
+        "desc": "Play the whole game on the Zoomer, with various changes to better explore the entire game.",
+        "contributors": [
+          "ZedB0T",
+          "barg034"
+        ],
+        "tags": [
+          "gameplay-mod",
+          "challenge"
+        ],
+        "release_date": "2022-09-20",
+        "URL": "https://github.com/dallmeyer/The-Zoomer-Legacy",
+        "website_url": "https://github.com/dallmeyer/The-Zoomer-Legacy",
+        "videos_url": "https://www.youtube.com/watch?v=BDvvCY8gFDQ"
+      },
+      "inirdin_textures": {
+        "displayName": "Texture Showcase",
+        "desc": "Showcase of various updated textures.",
+        "contributors": [
+          "Inirdin"
+        ],
+        "tags": [
+          "texture-mod"
+        ],
+        "release_date": "2022-08-31",
+        "URL": "https://github.com/Inirdin/opengoal-inirdin-texture-showcase/tree/main",
+        "website_url": "https://github.com/Inirdin/opengoal-inirdin-texture-showcase/blob/main/README.md#opengoal-inirdin-texture-showcase"
+      },
+      "jak_grows": {
+        "displayName": "Jak and Daxter But Every Time He Grabs An Orb He Grows",
+        "desc": "Jak and Daxter But Every Time He Grabs An Orb He Grows.",
+        "contributors": [
+          "Xyphles"
+        ],
+        "tags": [
+          "gameplay-mod",
+          "challenge"
+        ],
+        "release_date": "2022-11-01",
+        "URL": "https://github.com/Xyphles/X-mod-base/tree/Jak-and-Daxter-But-Every-Time-He-Grabs-An-Orb-He-Grows",
+        "website_url": "https://github.com/Xyphles/X-mod-base/tree/Jak-and-Daxter-But-Every-Time-He-Grabs-An-Orb-He-Grows",
+        "videos_url": "https://www.youtube.com/watch?v=dBP_25yT5YU"
+      },
+      "snowy_legacy": {
+        "displayName": "Snowy Legacy",
+        "desc": "Snowy texture pack and snowy weather everywhere.",
+        "contributors": [
+          "InnocentMiau"
+        ],
+        "tags": [
+          "texture-mod"
+        ],
+        "release_date": "2022-09-08",
+        "URL": "https://github.com/kekdeveloper/opengoal-mod-snowy-legacy/tree/main",
+        "website_url": "https://github.com/kekdeveloper/opengoal-mod-snowy-legacy/blob/main/README.md#opengoal-mod-snowy-legacy",
+        "videos_url": "https://www.youtube.com/watch?v=djoAMJMre6U"
+      },
+      "mystery_word": {
+        "displayName": "Mystery Word V2",
+        "desc": "If you say a certain word the game resets itself (requires 'VoiceAttack')",
+        "contributors": [
+          "MortisDG"
+        ],
+        "tags": [
+          "gameplay-mod",
+          "challenge"
+        ],
+        "release_date": "2022-11-03",
+        "URL": "https://github.com/MortisDG/MysteryWordV2",
+        "website_url": "https://github.com/MortisDG/MysteryWordV2",
+        "videos_url": "https://www.youtube.com/watch?v=dlXkd6FhjyY"
+      },
+      "random_actors": {
+        "displayName": "Random Actors/entities",
+        "desc": "Frong beach",
+        "contributors": [
+          "ZedB0T"
+        ],
+        "tags": [
+          "gameplay-mod",
+          "rng",
+          "challenge",
+          "beta"
+        ],
+        "release_date": "2022-11-04",
+        "URL": "https://github.com/Zedb0T/Zed-Mods/tree/Random-Actor-dev",
+        "website_url": "https://github.com/Zedb0T/Zed-Mods/tree/Random-Actor-dev"
+      },
+      "mikeeee": {
+        "displayName": "Random Enemies",
+        "desc": "Enemys in each level are randomized when jak spawns in.",
+        "contributors": [
+          "ZedB0T"
+        ],
+        "tags": [
+          "gameplay-mod",
+          "rng",
+          "challenge",
+          "beta"
+        ],
+        "release_date": "2022-12-05",
+        "URL": "https://github.com/Zedb0T/Zed-Mods/tree/Random-enemies",
+        "website_url": "https://github.com/Zedb0T/Zed-Mods/tree/Random-enemies"
+      },
+      "mirror_mode_every_cell": {
+        "displayName": "Mirror mode every cell",
+        "desc": "Potential Photosensitvity warning",
+        "contributors": [
+          "ZedB0T"
+        ],
+        "tags": [
+          "gameplay-mod",
+          "challenge",
+          "beta"
+        ],
+        "release_date": "2022-11-08",
+        "URL": "https://github.com/Zedb0T/Zed-Mods/tree/mirrormodeeverycell-",
+        "website_url": "https://github.com/Zedb0T/Zed-Mods/tree/mirrormodeeverycell-"
+      },
+      "new_eco": {
+        "displayName": "New Eco type",
+        "desc": "Adds new unfinished pink eco, this is a new type NOT an overwrite",
+        "contributors": [
+          "ZedB0T"
+        ],
+        "tags": [
+          "gameplay-mod",
+          "beta"
+        ],
+        "release_date": "2022-11-04",
+        "URL": "https://github.com/OpenGOAL-Unofficial-Mods/New-Eco-types/tree/w-pink",
+        "website_url": "https://github.com/OpenGOAL-Unofficial-Mods/New-Eco-types/tree/w-pink"
+      },
+      "open_ghosts": {
+        "displayName": "OpenGhosts",
+        "desc": "Record and playback Jak's position. Saves to a file so you can share with your friends! Make Sure you restart the game in debug mode!",
+        "contributors": [
+          "Yopie"
+        ],
+        "tags": [
+          "practice",
+          "speedrunning"
+        ],
+        "release_date": "2022-12-22",
+        "URL": "https://github.com/dryice10/openghosts",
+        "website_url": "https://github.com/dryice10/openghosts/blob/main/README.md#openghosts"
+      },
+      "forgotten_lands": {
+        "displayName": "The Forgotten Lands",
+        "desc": "Kuitar's first level. Just start a normal game at Geyser Rock. This is a work in progress and not fully finished yet.",
+        "contributors": [
+          "Kuitar"
+        ],
+        "tags": [
+          "custom-level",
+          "texture-mod",
+          "beta"
+        ],
+        "release_date": "2023-01-08",
+        "URL": "https://github.com/Kuitar5/the-forgotten-lands/releases",
+        "website_url": "https://github.com/Kuitar5/the-forgotten-lands/blob/main/README.md#the-forgotten-lands",
+        "videos_url": "https://youtube.com/playlist?list=PLUvfXyvZk2SC0A8TtqYV8ap97aVGu9rRP"
+      },
+      "its_ogre_now": {
+        "displayName": "ShrekAdventures",
+        "desc": "Shrek is life.",
+        "contributors": [
+          "ZedB0T"
+        ],
+        "tags": [
+          "custom-level",
+          "texture-mod",
+          "beta"
+        ],
+        "release_date": "2023-04-05",
+        "URL": "https://github.com/Zedb0T/shrekadventures/releases",
+        "website_url": "https://github.com/Zedb0T/shrekadventures",
+        "videos_url": "https://twitter.com/JakSpeedruns/status/1645693475277668354"
+      }
+    },
+  "jak2": {
+    "jak2_zoomer_legacy": {
+      "internalName": "jak2_zoomer_legacy",
+      "url": "https://github.com/dallmeyer/The-Zoomer-Legacy",
+      "contributors": [
+        "ZedB0T",
+        "barg034"
+      ],
+      "description": "Play the whole game on the Zoomer, with various changes to better explore the entire game.",
+      "displayName": "Jak2 The Zoomer Legacy",
+      "releaseDate": "2022-09-20",
+      "tags": [
+        "gameplay-mod",
+        "challenge"
+      ],
+      "videos_url": "https://www.youtube.com/watch?v=BDvvCY8gFDQ",
+      "websiteUrl": "https://github.com/dallmeyer/The-Zoomer-Legacy",
+      "modImage": "https://github.com/Zedb0T/TheFlutFlutLegacy/blob/main/ModImage.png?raw=true"
+    },
+    "jak2_zoomer_legacy1": {
+      "internalName": "jak2_zoomer_legacy1",
+      "url": "https://github.com/dallmeyer/The-Zoomer-Legacy",
+      "contributors": [
+        "ZedB0T",
+        "barg034"
+      ],
+      "description": "Play the whole game on the Zoomer, with various changes to better explore the entire game.",
+      "displayName": "Jak2 1 The Zoomer Legacy",
+      "releaseDate": "2022-09-20",
+      "tags": [
+        "gameplay-mod",
+        "challenge"
+      ],
+      "videos_url": "https://www.youtube.com/watch?v=BDvvCY8gFDQ",
+      "websiteUrl": "https://github.com/dallmeyer/The-Zoomer-Legacy",
+      "modImage": "https://github.com/Zedb0T/TheFlutFlutLegacy/blob/main/ModImage.png?raw=true"
+    }
+  },
+  "jak3": {
+    "jak3_zoomer_legacy": {
+      "internalName": "jak3_zoomer_legacy",
+      "url": "https://github.com/dallmeyer/The-Zoomer-Legacy",
+      "contributors": [
+        "ZedB0T",
+        "barg034"
+      ],
+      "description": "Play the whole game on the Zoomer, with various changes to better explore the entire game.",
+      "displayName": "Jak3 The Zoomer Legacy",
+      "releaseDate": "2022-09-20",
+      "tags": [
+        "gameplay-mod",
+        "challenge"
+      ],
+      "videos_url": "https://www.youtube.com/watch?v=BDvvCY8gFDQ",
+      "websiteUrl": "https://github.com/dallmeyer/The-Zoomer-Legacy",
+      "modImage": "https://github.com/Zedb0T/TheFlutFlutLegacy/blob/main/ModImage.png?raw=true"
+    },
+    "jak3_zoomer_legacy1": {
+      "internalName": "jak3_zoomer_legacy1",
+      "url": "https://github.com/dallmeyer/The-Zoomer-Legacy",
+      "contributors": [
+        "ZedB0T",
+        "barg034"
+      ],
+      "description": "Play the whole game on the Zoomer, with various changes to better explore the entire game.",
+      "displayName": "Jak3 2 The Zoomer Legacy",
+      "releaseDate": "2022-09-20",
+      "tags": [
+        "gameplay-mod",
+        "challenge"
+      ],
+      "videos_url": "https://www.youtube.com/watch?v=BDvvCY8gFDQ",
+      "websiteUrl": "https://github.com/dallmeyer/The-Zoomer-Legacy",
+      "modImage": "https://github.com/Zedb0T/TheFlutFlutLegacy/blob/main/ModImage.png?raw=true"
+    },
+    "jakx": null
+  }
+}
+}
