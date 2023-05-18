@@ -13,6 +13,7 @@
   import { VersionStore } from "$lib/stores/VersionStore";
   import { UpdateStore } from "$lib/stores/AppStore";
   import { saveActiveVersionChange } from "$lib/rpc/config";
+  import { _ } from "svelte-i18n";
 
   let versionsLoaded = false;
   let releases: ReleaseInfo[] = [];
@@ -158,9 +159,9 @@
 </script>
 
 <VersionList
-  initiallyOpen={true}
-  name="Mods"
-  description="Official versions are from the `jak-project` GitHub repository"
+  initiallyOpen={false}
+  name={$_("settings_versions_unofficial_tabName")}
+  description={$_("settings_versions_unofficial_description")}
   releaseList={releases}
   loaded={versionsLoaded}
   releaseType="official"

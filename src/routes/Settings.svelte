@@ -5,6 +5,7 @@
   import Versions from "./settings/Versions.svelte";
   import General from "./settings/General.svelte";
   import ModVersionList from "./settings/versions/ModVersionList.svelte";
+  import { _ } from "svelte-i18n";
 
   const params = useParams();
   $: activeTab = $params["tab"];
@@ -25,7 +26,7 @@
   >
     <TabItem
       open={!activeTab || activeTab === "general"}
-      title="General"
+      title={$_("settings_tabs_general")}
       activeClasses={tabItemActiveClasses}
       inactiveClasses={tabItemInactiveClasses}
     >
@@ -33,7 +34,7 @@
     </TabItem>
     <TabItem
       open={!activeTab || activeTab === "folders"}
-      title="Folders"
+      title={$_("settings_tabs_folders")}
       activeClasses={tabItemActiveClasses}
       inactiveClasses={tabItemInactiveClasses}
     >
@@ -41,7 +42,7 @@
     </TabItem>
     <TabItem
       open={activeTab === "versions"}
-      title="Version Management"
+      title={$_("settings_tabs_versions")}
       activeClasses={tabItemActiveClasses}
       inactiveClasses={tabItemInactiveClasses}
     >

@@ -12,12 +12,14 @@
   const location = useLocation();
   $: $location.pathname, updateStyle();
 
-  let style = "absolute -z-50 object-fill h-screen";
+  
   //TODO Add logic to select background movie and fall back to default if needed.
   let customVideoJak1Path;
   let customJak1Video;
   let customVideoJak2Path;
   let customJak2Video;
+  let style = "absolute object-fill h-screen";
+
   onMount(async () => {
     customJak1Video = (await getJak1MoviePath());
     customVideoJak1Path = convertFileSrc(await getJak1MoviePath());
@@ -38,7 +40,8 @@
     customVideoJak2Path = convertFileSrc(await getJak2MoviePath());
     
 
-    let newStyle = "absolute -z-50 object-fill h-screen";
+   
+    let newStyle = "absolute object-fill h-screen";
     let pathname = $location.pathname;
     if (pathname === "/jak1" || pathname === "/") {
       if (!(await isGameInstalled("jak1"))) {

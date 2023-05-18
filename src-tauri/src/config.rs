@@ -351,7 +351,7 @@ impl LauncherConfig {
       if !path.exists() {
         return Ok(Some("Provided file does not exist".to_owned()));
       }
-  
+
       if !path.is_file() {
         return Ok(Some("Provided file is not a file".to_owned()));
       }
@@ -372,7 +372,7 @@ impl LauncherConfig {
       if !path.exists() {
         return Ok(Some("Provided file does not exist".to_owned()));
       }
-  
+
       if !path.is_file() {
         return Ok(Some("Provided file is not a file".to_owned()));
       }
@@ -743,7 +743,7 @@ impl ModsConfig {
       if !path.exists() {
         return Ok(Some("Provided file does not exist".to_owned()));
       }
-  
+
       if !path.is_file() {
         return Ok(Some("Provided file is not a file".to_owned()));
       }
@@ -764,7 +764,7 @@ impl ModsConfig {
       if !path.exists() {
         return Ok(Some("Provided file does not exist".to_owned()));
       }
-  
+
       if !path.is_file() {
         return Ok(Some("Provided file is not a file".to_owned()));
       }
