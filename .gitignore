@@ -36,7 +36,8 @@ glewinfo.txt
 .svelte-kit/
 glew-cmake/
 active/
-versions/
+versions/mods
+versions/official
 
 TODO.md
 
