@@ -129,6 +129,9 @@ fn main() {
       app.manage(tokio::sync::Mutex::new(
         config::LauncherConfig::load_config(app.path_resolver().app_config_dir()),
       ));
+      app.manage(tokio::sync::Mutex::new(
+        config::LauncherConfig::load_mods_config(app.path_resolver().app_config_dir()),
+      ));
       Ok(())
     })
     .invoke_handler(tauri::generate_handler![

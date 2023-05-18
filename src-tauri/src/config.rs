@@ -121,6 +121,27 @@ pub struct LauncherConfig {
   pub active_version_folder: Option<String>,
 }
 
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ModsConfig {
+#[serde(skip_serializing)]
+#[serde(skip_deserializing)]
+  settings_path: Option<PathBuf>,
+
+#[serde(default = "default_version")]
+pub version: Option<String>,
+pub mod_list1: Option<String>,
+  pub requirements: Requirements,
+  pub games: SupportedGames,
+  pub last_active_game: Option<SupportedGame>,
+  pub installation_dir: Option<String>,
+  pub jak1_movie_dir: Option<String>,
+  pub jak2_movie_dir: Option<String>,
+  pub active_version: Option<String>,
+  pub active_version_folder: Option<String>,
+}
+
 fn default_version() -> Option<String> {
   Some("1.0".to_string())
 }
@@ -208,6 +229,75 @@ impl LauncherConfig {
     Ok(())
   }
 
+  pub fn load_mods_config(config_dir: Option<std::path::PathBuf>) -> ModsConfig {
+    match config_dir {
+      Some(config_dir) => {
+        let settings_path = &config_dir.join("mods_settings.json");
+        log::info!("Loading configuration at path: {}", settings_path.display());
+        if !settings_path.exists() {
+          log::error!("Could not locate settings file, using defaults");
+          return ModsConfig::default(Some(settings_path.to_path_buf()));
+        }
+        // Read the file
+        let content = match fs::read_to_string(settings_path) {
+          Ok(content) => content,
+          Err(err) => {
+            log::error!("Could not read mod_settings.json file: {}, using defaults", err);
+            return ModsConfig::default(Some(settings_path.to_path_buf()));
+          }
+        };
+
+        // Serialize from json
+        match serde_json::from_str::<ModsConfig>(&content) {
+          Ok(mut config) => {
+            log::info!(
+              "Successfully loaded settings file, version {}, app starting up",
+              config.version.as_ref().unwrap()
+            );
+
+            log::info!("Loading configuration at path: {}", settings_path.display());
+            config.settings_path = Some(settings_path.to_path_buf());
+            return config;
+          }
+          Err(err) => {
+            log::error!(
+              "Could not parse mod_settings.json file: {}, using defaults",
+              err
+            );
+            return ModsConfig::default(Some(settings_path.to_path_buf()));
+          }
+        };
+      }
+      None => {
+        log::warn!("Not loading configuration, no path provided. Using defaults");
+        ModsConfig::default(None)
+      }
+    }
+  }
+
+  pub fn save_mods_config(&self) -> Result<(), ConfigError> {
+    let settings_path = match &self.settings_path {
+      None => {
+        log::warn!("Can't save the settings file, as no path was initialized!");
+        return Err(ConfigError::Configuration(format!(
+          "No settings path defined, unable to save settings!"
+        )));
+      }
+      Some(path) => path,
+    };
+    let file = fs::File::create(settings_path)?;
+    serde_json::to_writer_pretty(file, &self)?;
+    Ok(())
+  }
+
+  pub fn reset_mods_to_defaults(&mut self) -> Result<(), ConfigError> {
+    let original_installation_dir = self.installation_dir.clone();
+    *self = Self::default(self.settings_path.clone());
+    self.installation_dir = original_installation_dir;
+    Self::save_mods_config(self)?;
+    Ok(())
+  }
+
   pub fn set_install_directory(&mut self, new_dir: String) -> Result<Option<String>, ConfigError> {
     // Do some tests on this folder, if they fail, return a decent error
     let path = Path::new(&new_dir);
@@ -257,7 +347,7 @@ impl LauncherConfig {
   pub fn set_jak1_movie_directory(&mut self, new_dir: String) -> Result<Option<String>, ConfigError> {
     // Do some tests on this file, if they fail, return a decent error
     let path = Path::new(&new_dir);
-    if (new_dir != "") {
+    if new_dir != "" {
       if !path.exists() {
         return Ok(Some("Provided file does not exist".to_owned()));
       }
@@ -278,7 +368,399 @@ impl LauncherConfig {
   pub fn set_jak2_movie_directory(&mut self, new_dir: String) -> Result<Option<String>, ConfigError> {
     // Do some tests on this file, if they fail, return a decent error
     let path = Path::new(&new_dir);
-    if (new_dir != "") {
+    if new_dir != "" {
+      if !path.exists() {
+        return Ok(Some("Provided file does not exist".to_owned()));
+      }
+  
+      if !path.is_file() {
+        return Ok(Some("Provided file is not a file".to_owned()));
+      }
+
+    }
+
+
+    // TODO Check our permissions on the folder by touching a file (and deleting it)
+
+    self.jak2_movie_dir = Some(new_dir);
+    self.save_config()?;
+    Ok(None)
+  }
+
+  pub fn set_opengl_requirement_met(&mut self, new_val: bool) -> Result<(), ConfigError> {
+    self.requirements.opengl = Some(new_val);
+    self.save_config()?;
+    Ok(())
+  }
+
+  pub fn set_active_version(&mut self, new_version: String) -> Result<(), ConfigError> {
+    self.active_version = Some(new_version);
+    self.save_config()?;
+    Ok(())
+  }
+
+  pub fn set_active_version_folder(
+    &mut self,
+    new_version_folder: String,
+  ) -> Result<(), ConfigError> {
+    self.active_version_folder = Some(new_version_folder);
+    self.save_config()?;
+    Ok(())
+  }
+
+  // TODO - this pattern isn't great.  It's made awkward by trying to be backwards compatible
+  // with the old format though
+  //
+  // I think there should be an enum involved here somewhere/somehow
+  pub fn update_installed_game_version(
+    &mut self,
+    game_name: &String,
+    installed: bool,
+  ) -> Result<(), ConfigError> {
+    match game_name.as_str() {
+      "jak1" => {
+        self.games.jak1.is_installed = installed;
+        if installed {
+          self.games.jak1.version = self.active_version.clone();
+          self.games.jak1.version_folder = self.active_version_folder.clone();
+        } else {
+          self.games.jak1.version = None;
+          self.games.jak1.version_folder = None;
+        }
+      }
+      "jak2" => {
+        self.games.jak2.is_installed = installed;
+        if installed {
+          self.games.jak2.version = self.active_version.clone();
+          self.games.jak2.version_folder = self.active_version_folder.clone();
+        } else {
+          self.games.jak2.version = None;
+          self.games.jak2.version_folder = None;
+        }
+      }
+      "jak3" => {
+        self.games.jak3.is_installed = installed;
+        if installed {
+          self.games.jak3.version = self.active_version.clone();
+          self.games.jak3.version_folder = self.active_version_folder.clone();
+        } else {
+          self.games.jak3.version = None;
+          self.games.jak3.version_folder = None;
+        }
+      }
+      "jakx" => {
+        self.games.jakx.is_installed = installed;
+        if installed {
+          self.games.jakx.version = self.active_version.clone();
+          self.games.jakx.version_folder = self.active_version_folder.clone();
+        } else {
+          self.games.jakx.version = None;
+          self.games.jakx.version_folder = None;
+        }
+      }
+      _ => {}
+    }
+    self.save_config()?;
+    Ok(())
+  }
+
+  pub fn is_game_installed(&self, game_name: &String) -> bool {
+    match game_name.as_str() {
+      "jak1" => {
+        return self.games.jak1.is_installed;
+      }
+      "jak2" => {
+        return self.games.jak2.is_installed;
+      }
+      "jak3" => {
+        return self.games.jak3.is_installed;
+      }
+      "jakx" => {
+        return self.games.jakx.is_installed;
+      }
+      _ => false,
+    }
+  }
+
+  pub fn game_install_version(&self, game_name: &String) -> String {
+    match game_name.as_str() {
+      "jak1" => {
+        return self.games.jak1.version.clone().unwrap_or("".to_string());
+      }
+      "jak2" => {
+        return self.games.jak2.version.clone().unwrap_or("".to_string());
+      }
+      "jak3" => {
+        return self.games.jak3.version.clone().unwrap_or("".to_string());
+      }
+      "jakx" => {
+        return self.games.jakx.version.clone().unwrap_or("".to_string());
+      }
+      _ => "".to_owned(),
+    }
+  }
+
+  pub fn game_install_version_folder(&self, game_name: &String) -> String {
+    match game_name.as_str() {
+      "jak1" => {
+        return self
+          .games
+          .jak1
+          .version_folder
+          .clone()
+          .unwrap_or("".to_string());
+      }
+      "jak2" => {
+        return self
+          .games
+          .jak2
+          .version_folder
+          .clone()
+          .unwrap_or("".to_string());
+      }
+      "jak3" => {
+        return self
+          .games
+          .jak3
+          .version_folder
+          .clone()
+          .unwrap_or("".to_string());
+      }
+      "jakx" => {
+        return self
+          .games
+          .jakx
+          .version_folder
+          .clone()
+          .unwrap_or("".to_string());
+      }
+      _ => "".to_owned(),
+    }
+  }
+}
+
+impl ModsConfig {
+  fn default(_settings_path: Option<PathBuf>) -> Self {
+    Self {
+      settings_path: _settings_path,
+      version: default_version(),
+      mod_list1: None,
+      requirements: Requirements::default(),
+      games: SupportedGames::default(),
+      last_active_game: None,
+      installation_dir: None,
+      jak1_movie_dir: None,
+      jak2_movie_dir: None,
+      active_version: None,
+      active_version_folder: Some("official".to_string()),
+    }
+  }
+
+  pub fn load_config(config_dir: Option<std::path::PathBuf>) -> LauncherConfig {
+    match config_dir {
+      Some(config_dir) => {
+        let settings_path = &config_dir.join("settings.json");
+        log::info!("Loading configuration at path: {}", settings_path.display());
+        if !settings_path.exists() {
+          log::error!("Could not locate settings file, using defaults");
+          return LauncherConfig::default(Some(settings_path.to_path_buf()));
+        }
+        // Read the file
+        let content = match fs::read_to_string(settings_path) {
+          Ok(content) => content,
+          Err(err) => {
+            log::error!("Could not read settings.json file: {}, using defaults", err);
+            return LauncherConfig::default(Some(settings_path.to_path_buf()));
+          }
+        };
+
+        // Serialize from json
+        match serde_json::from_str::<LauncherConfig>(&content) {
+          Ok(mut config) => {
+            log::info!(
+              "Successfully loaded settings file, version {}, app starting up",
+              config.version.as_ref().unwrap()
+            );
+            config.settings_path = Some(settings_path.to_path_buf());
+            return config;
+          }
+          Err(err) => {
+            log::error!(
+              "Could not parse settings.json file: {}, using defaults",
+              err
+            );
+            return LauncherConfig::default(Some(settings_path.to_path_buf()));
+          }
+        };
+      }
+      None => {
+        log::warn!("Not loading configuration, no path provided. Using defaults");
+        LauncherConfig::default(None)
+      }
+    }
+  }
+
+  pub fn save_config(&self) -> Result<(), ConfigError> {
+    let settings_path = match &self.settings_path {
+      None => {
+        log::warn!("Can't save the settings file, as no path was initialized!");
+        return Err(ConfigError::Configuration(format!(
+          "No settings path defined, unable to save settings!"
+        )));
+      }
+      Some(path) => path,
+    };
+    let file = fs::File::create(settings_path)?;
+    serde_json::to_writer_pretty(file, &self)?;
+    Ok(())
+  }
+
+  pub fn reset_to_defaults(&mut self) -> Result<(), ConfigError> {
+    let original_installation_dir = self.installation_dir.clone();
+    *self = Self::default(self.settings_path.clone());
+    self.installation_dir = original_installation_dir;
+    Self::save_config(self)?;
+    Ok(())
+  }
+
+  pub fn load_mods_config(config_dir: Option<std::path::PathBuf>) -> ModsConfig {
+    match config_dir {
+      Some(config_dir) => {
+        let settings_path = &config_dir.join("mods_settings.json");
+        log::info!("Loading configuration at path: {}", settings_path.display());
+        if !settings_path.exists() {
+          log::error!("Could not locate settings file, using defaults");
+          return ModsConfig::default(Some(settings_path.to_path_buf()));
+        }
+        // Read the file
+        let content = match fs::read_to_string(settings_path) {
+          Ok(content) => content,
+          Err(err) => {
+            log::error!("Could not read mod_settings.json file: {}, using defaults", err);
+            return ModsConfig::default(Some(settings_path.to_path_buf()));
+          }
+        };
+
+        // Serialize from json
+        match serde_json::from_str::<ModsConfig>(&content) {
+          Ok(mut config) => {
+            log::info!(
+              "Successfully loaded settings file, version {}, app starting up",
+              config.version.as_ref().unwrap()
+            );
+            config.settings_path = Some(settings_path.to_path_buf());
+            return config;
+          }
+          Err(err) => {
+            log::error!(
+              "Could not parse mod_settings.json file: {}, using defaults",
+              err
+            );
+            return ModsConfig::default(Some(settings_path.to_path_buf()));
+          }
+        };
+      }
+      None => {
+        log::warn!("Not loading configuration, no path provided. Using defaults");
+        ModsConfig::default(None)
+      }
+    }
+  }
+
+  pub fn save_mods_config(&self) -> Result<(), ConfigError> {
+    let settings_path = match &self.settings_path {
+      None => {
+        log::warn!("Can't save the settings file, as no path was initialized!");
+        return Err(ConfigError::Configuration(format!(
+          "No settings path defined, unable to save settings!"
+        )));
+      }
+      Some(path) => path,
+    };
+    let file = fs::File::create(settings_path)?;
+    serde_json::to_writer_pretty(file, &self)?;
+    Ok(())
+  }
+
+  pub fn reset_mods_to_defaults(&mut self) -> Result<(), ConfigError> {
+    let original_installation_dir = self.installation_dir.clone();
+    *self = Self::default(self.settings_path.clone());
+    self.installation_dir = original_installation_dir;
+    Self::save_mods_config(self)?;
+    Ok(())
+  }
+
+  pub fn set_install_directory(&mut self, new_dir: String) -> Result<Option<String>, ConfigError> {
+    // Do some tests on this folder, if they fail, return a decent error
+    let path = Path::new(&new_dir);
+    if !path.exists() {
+      return Ok(Some("Provided folder does not exist".to_owned()));
+    }
+
+    if !path.is_dir() {
+      return Ok(Some("Provided folder is not a folder".to_owned()));
+    }
+
+    // Check our permissions on the folder by touching a file (and deleting it)
+    let test_file = path.join(".perm-test.tmp");
+    match touch_file(&test_file) {
+      Err(e) => {
+        log::error!(
+          "Provided installation folder could not be written to: {}",
+          e
+        );
+        return Ok(Some("Provided folder cannot be written to".to_owned()));
+      }
+      _ => (),
+    }
+
+    // If the directory changes (it's not a no-op), we need to:
+    // - wipe any installed games (make them reinstall)
+    // - wipe the active version/version types
+    match &self.installation_dir {
+      Some(old_dir) => {
+        if *old_dir != new_dir {
+          self.active_version = None;
+          self.active_version_folder = None;
+          // TODO - when i cleanup the gross code below, also clean this up
+          self.games.jak1.is_installed = false;
+          self.games.jak1.version = None;
+          self.games.jak1.version_folder = None;
+        }
+      }
+      _ => (),
+    }
+
+    self.installation_dir = Some(new_dir);
+    self.save_config()?;
+    Ok(None)
+  }
+
+  pub fn set_jak1_movie_directory(&mut self, new_dir: String) -> Result<Option<String>, ConfigError> {
+    // Do some tests on this file, if they fail, return a decent error
+    let path = Path::new(&new_dir);
+    if new_dir != "" {
+      if !path.exists() {
+        return Ok(Some("Provided file does not exist".to_owned()));
+      }
+  
+      if !path.is_file() {
+        return Ok(Some("Provided file is not a file".to_owned()));
+      }
+
+    }
+
+    // TODO Check our permissions on the folder by touching a file (and deleting it)
+
+    self.jak1_movie_dir = Some(new_dir);
+    self.save_config()?;
+    Ok(None)
+  }
+
+  pub fn set_jak2_movie_directory(&mut self, new_dir: String) -> Result<Option<String>, ConfigError> {
+    // Do some tests on this file, if they fail, return a decent error
+    let path = Path::new(&new_dir);
+    if new_dir != "" {
       if !path.exists() {
         return Ok(Some("Provided file does not exist".to_owned()));
       }

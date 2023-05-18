@@ -4,6 +4,7 @@
   import Folders from "./settings/Folders.svelte";
   import Versions from "./settings/Versions.svelte";
   import General from "./settings/General.svelte";
+  import ModVersionList from "./settings/versions/ModVersionList.svelte";
 
   const params = useParams();
   $: activeTab = $params["tab"];
@@ -45,6 +46,14 @@
       inactiveClasses={tabItemInactiveClasses}
     >
       <Versions />
+    </TabItem>
+    <TabItem
+      open={activeTab === "mods"}
+      title="Mods"
+      activeClasses={tabItemActiveClasses}
+      inactiveClasses={tabItemInactiveClasses}
+    >
+      <ModVersionList />
     </TabItem>
   </Tabs>
 </div>

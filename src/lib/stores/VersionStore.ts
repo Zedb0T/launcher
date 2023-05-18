@@ -5,6 +5,7 @@ export interface VersionStoreSelectedInfo {
   official: string | null;
   unofficial: string | null;
   devel: string | null;
+  mods: string | null;
 }
 
 export interface VersionStoreIFace {
@@ -20,5 +21,6 @@ export const VersionStore = writable<VersionStoreIFace>({
     official: null,
     unofficial: null,
     devel: null,
+    mods: null,
   },
 });
