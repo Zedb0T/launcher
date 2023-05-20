@@ -33,6 +33,39 @@ export async function downloadOfficialVersion(
   return true;
 }
 
+export async function downloadModVersion(
+  version: String,
+  url: String
+): Promise<boolean> {
+  try {
+    await invoke("download_mod_version", {
+      version: version,
+      versionFolder: "",
+      url: url,
+    });
+  } catch (e) {
+    exceptionLog("Unable to download official version", e);
+    toastStore.makeToast("Unable to download version", "error");
+    return false;
+  }
+  return true;
+}
+
+export async function update_cache_if_need(
+  version: String,
+): Promise<boolean> {
+  try {
+    await invoke("update_cache_if_need", {
+      filename: version,
+    });
+  } catch (e) {
+    exceptionLog("Unable to download official version", e);
+    toastStore.makeToast("Unable to download version", "error");
+    return false;
+  }
+  return true;
+}
+
 export async function removeVersion(
   version: String,
   versionFolder: String

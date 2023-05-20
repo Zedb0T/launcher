@@ -52,8 +52,8 @@ export async function listOfficialReleases(): Promise<ReleaseInfo[]> {
       version: release.tag_name,
       date: release.published_at,
       githubLink: release.html_url,
-      downloadUrl: "http://www.google.com",
-      //downloadUrl: await getDownloadLinkForCurrentPlatform(release),
+      //downloadUrl: "http://www.google.com",
+      downloadUrl: await getDownloadLinkForCurrentPlatform(release),
       isDownloaded: false,
       pendingAction: false,
     });
@@ -75,8 +75,8 @@ export async function getLatestOfficialRelease(): Promise<ReleaseInfo> {
     version: githubRelease.tag_name,
     date: githubRelease.published_at,
     githubLink: githubRelease.html_url,
-    downloadUrl: "http://www.google.com",
-    //downloadUrl: await getDownloadLinkForCurrentPlatform(release),
+    //downloadUrl: "http://www.google.com",
+    downloadUrl: await getDownloadLinkForCurrentPlatform(githubRelease),
     isDownloaded: false,
     pendingAction: false,
   };

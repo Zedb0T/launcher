@@ -16,6 +16,10 @@ mod config;
 mod textures;
 mod util;
 
+
+
+
+//End Mod Stuff
 fn log_crash(panic_info: Option<&std::panic::PanicInfo>, error: Option<tauri::Error>) {
   let backtrace = Backtrace::new();
   let log_contents;
@@ -169,6 +173,10 @@ fn main() {
       commands::logging::frontend_log,
       commands::support::generate_support_package,
       commands::versions::download_version,
+      //Mod stuff
+      commands::versions::download_mod_version,
+      commands::versions::update_cache_if_need,
+      //End Mod Stuff
       commands::versions::go_to_version_folder,
       commands::versions::list_downloaded_versions,
       commands::versions::remove_version,

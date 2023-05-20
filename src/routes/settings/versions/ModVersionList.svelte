@@ -1,6 +1,9 @@
 <script lang="ts">
   import { loadModsLocal, type CurrentSelectedMod, type GameMod, type ModRepositoryFile } from "$lib/mods/mods";
   import { onMount } from "svelte";
+  import {
+    downloadModVersion, update_cache_if_need,
+  } from "$lib/rpc/versions";
   
   let modLists: ModRepositoryFile[] = [];
 
@@ -68,13 +71,30 @@
     return undefined;
   }
 
+  async function onDownloadModVersion(event: any) {
+
+    await downloadModVersion(
+      "v0.1.26",
+      "https://github.com/open-goal/jak-project/releases/download/v0.1.26/opengoal-windows-v0.1.26.zip"
+    );
+
+  }
+
+  async function onCheckFileCache(event: any) {
+
+await update_cache_if_need(
+  "C:\\Users\\NinjaPC\\Downloads\\New Folder\\versions\\mods\\v0.1.26\\extractor.exe"
+);
+
+}
+
 </script>
 
 <div class="flex flex-col gap-2 mt-2">
   <div>
     <!-- placeholders function does not work -->
-    <button class="custom-button" on:click={handleOptionSelected}>Install ZIP</button>
-    <button class="custom-button" on:click={handleOptionSelected}>Reinstall ZIP</button>
+    <button class="custom-button" on:click={onDownloadModVersion}>Install ZIP</button>
+    <button class="custom-button" on:click={onCheckFileCache}>Reinstall ZIP</button>
     <button class="custom-button" on:click={handleOptionSelected}>Uninstall ZIP</button>
     
 
