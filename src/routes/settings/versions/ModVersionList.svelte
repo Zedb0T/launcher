@@ -113,7 +113,7 @@ async function loadImage(modNAME) {
     {/each}
 
 
-    <img id="imageElement" alt="Image" width="300" height="300" onload={loadImage(currentMod.currentModInternalName)}>
+    <img id="imageElement" alt="ModImage" width="300" height="300" onload={loadImage(currentMod.currentModInternalName)}>
     <br>
     <p>Display Name: {currentMod.currentModDisplayName}</p>
     <br>
