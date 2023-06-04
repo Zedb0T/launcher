@@ -247,6 +247,7 @@ pub fn get_or_check_cache(game_name: &str, mod_name: &str) {
             .as_secs();
 
           let twenty_four_hours = 24 * 60 * 60;
+          //let twenty_four_hours = 10;
           if current_time - cache_file_modified_time >= twenty_four_hours {
             // Cache file is older than 24 hours, delete it
             fs::remove_file(&cache_file_path).expect("Failed to delete cache file");
@@ -258,41 +259,33 @@ pub fn get_or_check_cache(game_name: &str, mod_name: &str) {
           }
         }
 
-        // Download the mod image file
         if let Some(mod_image) = mod_data.get("modImage") {
           if let Some(mod_image_url) = mod_image.as_str() {
-            let client = Client::new();
-            let response = client.get(mod_image_url).send();
-
-            if let Ok(mut file) = File::create(cache_directory.clone() + "\\modImage.png") {
-              if let Ok(body) = response {
-                let bytes = body.bytes().unwrap();
-                let bytes_slice: &[u8] = &bytes;
-
-                file
-                  .write_all(bytes_slice)
-                  .expect("Failed to write mod image to file");
-
-                // Load the downloaded image using the `image` crate
-                let image = image::open(cache_directory.clone() + "\\modImage.png")
-                  .expect("Failed to open image file");
-
-                // Calculate the target file size (500KB)
-                const TARGET_FILE_SIZE: u64 = 500 * 1024;
-
-                // Adjust the image quality to achieve the target file size
-                let mut resized_image = image.clone();
-                let mut quality = 100;
-
-                while resized_image.as_bytes().len() > TARGET_FILE_SIZE as usize && quality > 0 {
-                  resized_image = image.resize_exact(
-                    image.width() / 2,
-                    image.height() / 2,
-                    image::imageops::FilterType::Lanczos3,
-                  );
-                  quality -= 10;
-                }
-
+              let client = Client::new();
+              let response = client.get(mod_image_url).send();
+      
+              if let Ok(mut body) = response {
+                  let bytes = body.bytes().unwrap();
+                  let bytes_slice: &[u8] = &bytes;
+      
+                  // Load the downloaded image using the `image` crate
+                  let image = image::load_from_memory(bytes_slice).expect("Failed to load image from memory");
+      
+                  // Calculate the target file size (500KB)
+                  const TARGET_FILE_SIZE: u64 = 500 * 1024;
+      
+                  // Adjust the image quality to achieve the target file size
+                  let mut resized_image = image.clone();
+                  let mut quality = 100;
+      
+                  while resized_image.as_bytes().len() > TARGET_FILE_SIZE as usize && quality > 0 {
+                      resized_image = resized_image.resize_exact(
+                          resized_image.width() / 2,
+                          resized_image.height() / 2,
+                          image::imageops::FilterType::Lanczos3,
+                      );
+                      quality -= 10;
+                  
                 // Save the resized image with the adjusted quality
                 resized_image
                   .save_with_format(
@@ -367,26 +360,6 @@ pub fn get_image_file(path: &str) -> Result<String, InvokeError> {
   Ok(encoded_data)
 }
 
-#[tauri::command]
-pub fn check_and_create_json(path: &str) -> io::Result<()> {
-  let json_exists = std::path::Path::new(path).exists();
-
-  if !json_exists {
-    let jak_ratchet_json = json!({
-        "Jak": "",
-        "ratchet": {
-            "clank": ""
-        }
-    });
-
-    let json_string = jak_ratchet_json.to_string();
-
-    let mut file = File::create(path)?;
-    file.write_all(json_string.as_bytes())?;
-  }
-
-  Ok(())
-}
 
 #[tauri::command]
 pub async fn download_mod_version(
