@@ -2,7 +2,7 @@
   import { loadModsLocal, type CurrentSelectedMod, type GameMod, type ModRepositoryFile } from "$lib/mods/mods";
   import { onMount } from "svelte";
   import {
-    downloadModVersion, update_cache_if_need, getcache
+    downloadModVersion, getcache
   } from "$lib/rpc/versions";
   
   let modLists: ModRepositoryFile[] = [];
@@ -83,9 +83,7 @@
 
   async function onCheckFileCache(event: any) {
 await getcache("jak1","blindfold_assist");
-//await update_cache_if_need(
-//  "extractor.json"
-//);
+
 
 }
 
