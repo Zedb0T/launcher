@@ -305,6 +305,12 @@ use chrono::{DateTime, Utc};
 use std::io::{self, prelude::*};
 use serde_json::{json};
 
+fn generate_api_url(repo_url: &str) -> String {
+  let repo_path = repo_url.trim_end_matches(".git");
+  let api_url = format!("{}/releases?per_page=100", repo_path.replace("https://github.com/", "https://api.github.com/repos/"));
+  api_url
+}
+
 #[tauri::command]
 pub fn check_and_create_json(path: &str) -> io::Result<()> {
     let json_exists = std::path::Path::new(path).exists();
