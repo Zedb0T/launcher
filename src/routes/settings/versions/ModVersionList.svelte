@@ -2,7 +2,7 @@
   import { loadModsLocal, type CurrentSelectedMod, type GameMod, type ModRepositoryFile } from "$lib/mods/mods";
   import { onMount } from "svelte";
   import {
-    downloadModVersion, update_cache_if_need,
+    downloadModVersion, update_cache_if_need, getcache
   } from "$lib/rpc/versions";
   
   let modLists: ModRepositoryFile[] = [];
@@ -50,6 +50,7 @@
     //console.log('Selected option:', selectedModName);
     // Call the updateModFields function
     updateModFields(getModData(selectedModName));
+
   }
 
   function getModData(modName: string): GameMod | undefined {
@@ -81,10 +82,10 @@
   }
 
   async function onCheckFileCache(event: any) {
-
-await update_cache_if_need(
-  "C:\\Users\\NinjaPC\\Downloads\\New Folder\\versions\\mods\\v0.1.26\\extractor.exe"
-);
+await getcache("jak1","blindfold_assist");
+//await update_cache_if_need(
+//  "extractor.json"
+//);
 
 }
 
@@ -93,8 +94,8 @@ await update_cache_if_need(
 <div class="flex flex-col gap-2 mt-2">
   <div>
     <!-- placeholders function does not work -->
-    <button class="custom-button" on:click={onDownloadModVersion}>Install ZIP</button>
-    <button class="custom-button" on:click={onCheckFileCache}>Reinstall ZIP</button>
+    <button class="custom-button" on:click={onDownloadModVersion}>Download Mod</button>
+    <button class="custom-button" on:click={onCheckFileCache}>Check Cache</button>
     <button class="custom-button" on:click={handleOptionSelected}>Uninstall ZIP</button>
     
 
