@@ -141,11 +141,10 @@ pub async fn download_version(
   )))
 }
 
-
+use serde::{Deserialize, Serialize};
+use serde_json::{self, Value};
 use std::fs::File;
 use std::io::Read;
-use serde_json::{self, Value};
-use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize)]
 struct ModFile {
@@ -163,7 +162,7 @@ struct Games {
 }
 
 //Mod stuff
-#[derive(Debug, Deserialize, Serialize,Clone)]
+#[derive(Debug, Deserialize, Serialize, Clone)]
 struct CurrentSelectedMod {
   currentModInternalName: String,
   currentModDisplayName: String,
@@ -178,109 +177,137 @@ struct CurrentSelectedMod {
   currentModImage: String,
 }
 
-
-
-
-
-
 use std::io::Write;
-
-
 
 #[derive(Debug, Deserialize, Serialize)]
 struct Game {
-    internalName: String,
-    url: String,
-    contributors: Vec<String>,
-    description: String,
-    displayName: String,
-    releaseDate: String,
-    tags: Vec<String>,
-    websiteUrl: String,
-    modImage: String,
+  internalName: String,
+  url: String,
+  contributors: Vec<String>,
+  description: String,
+  displayName: String,
+  releaseDate: String,
+  tags: Vec<String>,
+  websiteUrl: String,
+  modImage: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 struct GameData {
-    games: Value,
+  games: Value,
 }
+use image::{DynamicImage, GenericImageView, ImageFormat, ImageOutputFormat};
 use reqwest::blocking::Client;
-
 
 #[tauri::command]
 pub fn get_or_check_cache(game_name: &str, mod_name: &str) {
-    // Specify the path of the input JSON file
-    let data_file_path = "C:\\Users\\NinjaPC\\Documents\\Github\\launcher\\src\\assets\\localmodtest\\mods.json";
+  // Specify the path of the input JSON file
+  let data_file_path =
+    "C:\\Users\\NinjaPC\\Documents\\Github\\launcher\\src\\assets\\localmodtest\\mods.json";
 
-    // Define the directory where the cache file will be created
-    let cache_directory = format!("C:\\Users\\NinjaPC\\Downloads\\New Folder\\versions\\mods\\cache\\{}", mod_name);
+  // Define the directory where the cache file will be created
+  let cache_directory = format!(
+    "C:\\Users\\NinjaPC\\Downloads\\New Folder\\versions\\mods\\cache\\{}",
+    mod_name
+  );
 
-    // Read the JSON file
-    let file = File::open(data_file_path).expect("Failed to open file");
-    let data: GameData = serde_json::from_reader(file).expect("Failed to parse JSON");
+  // Read the JSON file
+  let file = File::open(data_file_path).expect("Failed to open file");
+  let data: GameData = serde_json::from_reader(file).expect("Failed to parse JSON");
 
-    // Check if the cache directory exists, create it if it doesn't
-    if !Path::new(&cache_directory).exists() {
-        fs::create_dir_all(&cache_directory).expect("Failed to create cache directory");
-        println!("Cache directory created: {}", cache_directory);
-    }
+  // Check if the cache directory exists, create it if it doesn't
+  if !Path::new(&cache_directory).exists() {
+    fs::create_dir_all(&cache_directory).expect("Failed to create cache directory");
+    println!("Cache directory created: {}", cache_directory);
+  }
 
-    // Find the game data by name
-    if let Value::Object(games) = data.games {
-        if let Some(game_data) = games.get(game_name) {
-            if let Some(mod_data) = game_data.get(mod_name) {
-                // Check if the cache file exists
-                let cache_file_path = format!("{}/{}_{}_cache.json", &cache_directory, game_name, mod_name);
-                let cache_file_exists = fs::metadata(&cache_file_path).is_ok();
+  // Find the game data by name
+  if let Value::Object(games) = data.games {
+    if let Some(game_data) = games.get(game_name) {
+      if let Some(mod_data) = game_data.get(mod_name) {
+        // Check if the cache file exists
+        let cache_file_path = format!("{}/{}_{}_cache.json", &cache_directory, game_name, mod_name);
+        let cache_file_exists = fs::metadata(&cache_file_path).is_ok();
 
-                if cache_file_exists {
-                    // Check if the cache file is older than 24 hours
-                    let cache_file_modified = fs::metadata(&cache_file_path)
-                        .expect("Failed to get cache file metadata")
-                        .modified()
-                        .expect("Failed to get cache file modified time");
+        if cache_file_exists {
+          // Check if the cache file is older than 24 hours
+          let cache_file_modified = fs::metadata(&cache_file_path)
+            .expect("Failed to get cache file metadata")
+            .modified()
+            .expect("Failed to get cache file modified time");
 
-                    let current_time = SystemTime::now()
-                        .duration_since(UNIX_EPOCH)
-                        .expect("Failed to get current time")
-                        .as_secs();
+          let current_time = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .expect("Failed to get current time")
+            .as_secs();
 
-                    let cache_file_modified_time = cache_file_modified
-                        .duration_since(UNIX_EPOCH)
-                        .expect("Failed to get cache file modified time")
-                        .as_secs();
+          let cache_file_modified_time = cache_file_modified
+            .duration_since(UNIX_EPOCH)
+            .expect("Failed to get cache file modified time")
+            .as_secs();
 
-                    let twenty_four_hours = 24 * 60 * 60;
-                    if current_time - cache_file_modified_time >= twenty_four_hours {
-                        // Cache file is older than 24 hours, delete it
-                        fs::remove_file(&cache_file_path).expect("Failed to delete cache file");
-                        println!("Old cache file deleted: {}", cache_file_path);
-                    } else {
-                        // Cache file is up to date, no need to regenerate
-                        println!("Cache file is up to date: {}", cache_file_path);
-                        return;
-                    }
+          let twenty_four_hours = 24 * 60 * 60;
+          if current_time - cache_file_modified_time >= twenty_four_hours {
+            // Cache file is older than 24 hours, delete it
+            fs::remove_file(&cache_file_path).expect("Failed to delete cache file");
+            println!("Old cache file deleted: {}", cache_file_path);
+          } else {
+            // Cache file is up to date, no need to regenerate
+            println!("Cache file is up to date: {}", cache_file_path);
+            return;
+          }
+        }
+
+        // Download the mod image file
+        if let Some(mod_image) = mod_data.get("modImage") {
+          if let Some(mod_image_url) = mod_image.as_str() {
+            let client = Client::new();
+            let response = client.get(mod_image_url).send();
+
+            if let Ok(mut file) = File::create(cache_directory.clone() + "\\modImage.png") {
+              if let Ok(body) = response {
+                let bytes = body.bytes().unwrap();
+                let bytes_slice: &[u8] = &bytes;
+
+                file
+                  .write_all(bytes_slice)
+                  .expect("Failed to write mod image to file");
+
+                // Load the downloaded image using the `image` crate
+                let image = image::open(cache_directory.clone() + "\\modImage.png")
+                  .expect("Failed to open image file");
+
+                // Calculate the target file size (500KB)
+                const TARGET_FILE_SIZE: u64 = 500 * 1024;
+
+                // Adjust the image quality to achieve the target file size
+                let mut resized_image = image.clone();
+                let mut quality = 100;
+
+                while resized_image.as_bytes().len() > TARGET_FILE_SIZE as usize && quality > 0 {
+                  resized_image = image.resize_exact(
+                    image.width() / 2,
+                    image.height() / 2,
+                    image::imageops::FilterType::Lanczos3,
+                  );
+                  quality -= 10;
                 }
 
-                // Download the mod image file
-                if let Some(mod_image) = mod_data.get("modImage") {
-                  if let Some(mod_image_url) = mod_image.as_str() {
-                      let client = Client::new();
-                      let response = client.get(mod_image_url).send();
-              
-                      if let Ok(mut file) = File::create(cache_directory.clone() + "\\modImage.png") {
-                          if let Ok(body) = response {
-                              let bytes = body.bytes().unwrap();
-                              let bytes_slice: &[u8] = &bytes;
-              
-                              file.write_all(bytes_slice).expect("Failed to write mod image to file");
-                          }
-                      }
-                  }
-              }
+                // Save the resized image with the adjusted quality
+                resized_image
+                  .save_with_format(
+                    &(cache_directory.clone() + "\\modImage.png"),
+                    ImageFormat::Png,
+                  )
+                  .expect("Failed to save resized image");
+
+                // Update the cache file path to use the resized image
+                let cache_file_path =
+                  format!("{}/{}_{}_cache.json", &cache_directory, game_name, mod_name);
 
                 // Convert the mod data into a JSON string
-                let mod_json = serde_json::to_string_pretty(&mod_data).expect("Failed to convert to JSON");
+                let mod_json =
+                  serde_json::to_string_pretty(&mod_data).expect("Failed to convert to JSON");
 
                 // Create a new JSON file with the mod data
                 let mut new_file = File::create(&cache_file_path).expect("Failed to create file");
@@ -288,72 +315,78 @@ pub fn get_or_check_cache(game_name: &str, mod_name: &str) {
 
                 println!("Cache file generated: {}", cache_file_path);
                 return;
+              }
             }
+          }
         }
-    }
 
-    // Game data or mod data not found for the specified names
-    println!("Game data or mod data not found for game: {}, mod: {}", game_name, mod_name);
+        // Game data or mod data not found for the specified names
+        println!(
+          "Game data or mod data not found for game: {}, mod: {}",
+          game_name, mod_name
+        );
+      }
+    }
+  }
 }
 
 use chrono::{DateTime, Utc};
 
-
-
+use serde_json::json;
 use std::io::{self, prelude::*};
-use serde_json::{json};
 
 fn generate_api_url(repo_url: &str) -> String {
   let repo_path = repo_url.trim_end_matches(".git");
-  let api_url = format!("{}/releases?per_page=100", repo_path.replace("https://github.com/", "https://api.github.com/repos/"));
+  let api_url = format!(
+    "{}/releases?per_page=100",
+    repo_path.replace("https://github.com/", "https://api.github.com/repos/")
+  );
   api_url
 }
 use base64::encode;
 
 #[derive(Debug, Serialize)] // Implement Serialize trait for the Result type
 pub struct InvokeError {
-    message: String,
+  message: String,
 }
 
 impl std::convert::From<std::io::Error> for InvokeError {
-    fn from(error: std::io::Error) -> Self {
-        Self {
-            message: format!("I/O error: {}", error),
-        }
+  fn from(error: std::io::Error) -> Self {
+    Self {
+      message: format!("I/O error: {}", error),
     }
+  }
 }
 
 #[tauri::command]
 pub fn get_image_file(path: &str) -> Result<String, InvokeError> {
-    let mut file = std::fs::File::open(path)?;
-    let mut image_data = Vec::new();
-    file.read_to_end(&mut image_data)?;
-    let encoded_data = encode(&image_data);
-    Ok(encoded_data)
+  let mut file = std::fs::File::open(path)?;
+  let mut image_data = Vec::new();
+  file.read_to_end(&mut image_data)?;
+  let encoded_data = encode(&image_data);
+  Ok(encoded_data)
 }
 
 #[tauri::command]
 pub fn check_and_create_json(path: &str) -> io::Result<()> {
-    let json_exists = std::path::Path::new(path).exists();
+  let json_exists = std::path::Path::new(path).exists();
 
-    if !json_exists {
-        let jak_ratchet_json = json!({
-            "Jak": "",
-            "ratchet": {
-                "clank": ""
-            }
-        });
+  if !json_exists {
+    let jak_ratchet_json = json!({
+        "Jak": "",
+        "ratchet": {
+            "clank": ""
+        }
+    });
 
-        let json_string = jak_ratchet_json.to_string();
+    let json_string = jak_ratchet_json.to_string();
 
-        let mut file = File::create(path)?;
-        file.write_all(json_string.as_bytes())?;
-    }
+    let mut file = File::create(path)?;
+    file.write_all(json_string.as_bytes())?;
+  }
 
-    Ok(())
+  Ok(())
 }
-
-
 
 #[tauri::command]
 pub async fn download_mod_version(
