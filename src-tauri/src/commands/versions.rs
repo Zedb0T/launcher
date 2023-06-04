@@ -208,14 +208,12 @@ use reqwest::blocking::Client;
 
 
 #[tauri::command]
-pub fn getcache(game_name: &str, mod_name: &str) {
+pub fn get_or_check_cache(game_name: &str, mod_name: &str) {
     // Specify the path of the input JSON file
     let data_file_path = "C:\\Users\\NinjaPC\\Documents\\Github\\launcher\\src\\assets\\localmodtest\\mods.json";
 
     // Define the directory where the cache file will be created
     let cache_directory = format!("C:\\Users\\NinjaPC\\Downloads\\New Folder\\versions\\mods\\cache\\{}", mod_name);
-
-    println!("Cache directory: {}", cache_directory);
 
     // Read the JSON file
     let file = File::open(data_file_path).expect("Failed to open file");
@@ -309,6 +307,29 @@ fn generate_api_url(repo_url: &str) -> String {
   let repo_path = repo_url.trim_end_matches(".git");
   let api_url = format!("{}/releases?per_page=100", repo_path.replace("https://github.com/", "https://api.github.com/repos/"));
   api_url
+}
+use base64::encode;
+
+#[derive(Debug, Serialize)] // Implement Serialize trait for the Result type
+pub struct InvokeError {
+    message: String,
+}
+
+impl std::convert::From<std::io::Error> for InvokeError {
+    fn from(error: std::io::Error) -> Self {
+        Self {
+            message: format!("I/O error: {}", error),
+        }
+    }
+}
+
+#[tauri::command]
+pub fn get_image_file(path: &str) -> Result<String, InvokeError> {
+    let mut file = std::fs::File::open(path)?;
+    let mut image_data = Vec::new();
+    file.read_to_end(&mut image_data)?;
+    let encoded_data = encode(&image_data);
+    Ok(encoded_data)
 }
 
 #[tauri::command]

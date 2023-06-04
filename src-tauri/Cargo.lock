@@ -2531,6 +2531,7 @@ name = "opengoal-launcher"
 version = "2.1.3"
 dependencies = [
  "backtrace",
+ "base64 0.13.1",
  "chrono",
  "dir-diff",
  "directories",

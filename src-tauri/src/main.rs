@@ -175,7 +175,8 @@ fn main() {
       commands::versions::download_version,
       //Mod stuff
       commands::versions::download_mod_version,
-      commands::versions::getcache,
+      commands::versions::get_or_check_cache,
+      commands::versions::get_image_file,
       //End Mod Stuff
       commands::versions::go_to_version_folder,
       commands::versions::list_downloaded_versions,

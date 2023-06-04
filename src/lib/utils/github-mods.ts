@@ -35,6 +35,8 @@ async function getDownloadLinkForCurrentPlatform(
   return undefined;
 }
 
+
+
 export async function listModdedReleases(): Promise<ReleaseInfo[]> {
   let releases = [];
   // TODO - handle rate limiting

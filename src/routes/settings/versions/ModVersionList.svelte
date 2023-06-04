@@ -2,9 +2,9 @@
   import { loadModsLocal, type CurrentSelectedMod, type GameMod, type ModRepositoryFile } from "$lib/mods/mods";
   import { onMount } from "svelte";
   import {
-    downloadModVersion, getcache
+    downloadModVersion, get_or_check_cache, get_image_file
   } from "$lib/rpc/versions";
-  
+
   let modLists: ModRepositoryFile[] = [];
 
   let currentMod: CurrentSelectedMod = {
@@ -44,13 +44,14 @@
   //This is for the drop-down box
   let selectedModName: string;
 
-  function handleOptionSelected(event) {
+  async function handleOptionSelected(event) {
     selectedModName = event.target.value;
     // Call your desired function or perform actions based on the selected option
     //console.log('Selected option:', selectedModName);
     // Call the updateModFields function
     updateModFields(getModData(selectedModName));
-
+    await get_or_check_cache("jak1",currentMod.currentModInternalName);
+   
   }
 
   function getModData(modName: string): GameMod | undefined {
@@ -81,11 +82,15 @@
 
   }
 
-  async function onCheckFileCache(event: any) {
-await getcache("jak1",currentMod.currentModInternalName);
-
-
+async function loadImage(modNAME) {
+  const imagePath = `C:\\Users\\NinjaPC\\Downloads\\New Folder\\versions\\mods\\cache\\${modNAME}\\modImage.png`;
+  const imageDataUrl = await get_image_file(imagePath);
+  const imgElement = document.getElementById("imageElement");
+  imgElement.src = imageDataUrl;
 }
+
+
+
 
 </script>
 
@@ -93,7 +98,6 @@ await getcache("jak1",currentMod.currentModInternalName);
   <div>
     <!-- placeholders function does not work -->
     <button class="custom-button" on:click={onDownloadModVersion}>Download Mod</button>
-    <button class="custom-button" on:click={onCheckFileCache}>Check Cache</button>
     <button class="custom-button" on:click={handleOptionSelected}>Uninstall ZIP</button>
     
 
@@ -108,7 +112,8 @@ await getcache("jak1",currentMod.currentModInternalName);
       </div>
     {/each}
 
-    <img src={currentMod.currentModImage} alt="" width="300" height="300">
+
+    <img id="imageElement" alt="Image" width="300" height="300" onload={loadImage(currentMod.currentModInternalName)}>
     <br>
     <p>Display Name: {currentMod.currentModDisplayName}</p>
     <br>

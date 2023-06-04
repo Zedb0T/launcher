@@ -52,12 +52,12 @@ export async function downloadModVersion(
 }
 
 
-export async function getcache(
+export async function get_or_check_cache(
   game_name: String,
   version: String,
 ): Promise<boolean> {
   try {
-    await invoke("getcache", {
+    await invoke("get_or_check_cache", {
       gameName: game_name,
       modName: version,
     });
@@ -68,6 +68,21 @@ export async function getcache(
   }
   return true;
 }
+
+export async function get_image_file(path) {
+  try {
+    const imageData = await invoke("get_image_file", { path: path });
+    return `data:image/png;base64, ${imageData}`;
+  } catch (e) {
+    exceptionLog("Unable to download official version", e);
+    toastStore.makeToast("Unable to download version", "error");
+    return null;
+  }
+}
+
+
+
+
 
 export async function removeVersion(
   version: String,
