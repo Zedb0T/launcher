@@ -82,7 +82,7 @@
   }
 
   async function onCheckFileCache(event: any) {
-await getcache("jak1","blindfold_assist");
+await getcache("jak1",currentMod.currentModInternalName);
 
 
 }
