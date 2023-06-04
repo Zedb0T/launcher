@@ -204,6 +204,7 @@ struct Game {
 struct GameData {
     games: Value,
 }
+use reqwest::blocking::Client;
 
 
 #[tauri::command]
@@ -263,6 +264,23 @@ pub fn getcache(game_name: &str, mod_name: &str) {
                     }
                 }
 
+                // Download the mod image file
+                if let Some(mod_image) = mod_data.get("modImage") {
+                  if let Some(mod_image_url) = mod_image.as_str() {
+                      let client = Client::new();
+                      let response = client.get(mod_image_url).send();
+              
+                      if let Ok(mut file) = File::create(cache_directory.clone() + "\\modImage.png") {
+                          if let Ok(body) = response {
+                              let bytes = body.bytes().unwrap();
+                              let bytes_slice: &[u8] = &bytes;
+              
+                              file.write_all(bytes_slice).expect("Failed to write mod image to file");
+                          }
+                      }
+                  }
+              }
+
                 // Convert the mod data into a JSON string
                 let mod_json = serde_json::to_string_pretty(&mod_data).expect("Failed to convert to JSON");
 
@@ -282,55 +300,6 @@ pub fn getcache(game_name: &str, mod_name: &str) {
 
 use chrono::{DateTime, Utc};
 
-#[tauri::command]
-pub fn update_cache_if_need(filename: &str) {
-    // Check if the file exists
-    if Path::new(filename).exists() {
-        // Get the metadata of the file
-        println!("Looking for {} cache.", filename);
-        if let Ok(metadata) = fs::metadata(filename) {
-            // Get the file creation time
-            if let Ok(created_time) = metadata.created() {
-                // Get the current system time
-                if let Ok(current_time) = SystemTime::now().duration_since(UNIX_EPOCH) {
-                    // Calculate the age of the file in seconds
-                    let age = created_time.duration_since(UNIX_EPOCH).and_then(|created_duration| Ok(current_time.checked_sub(created_duration)));
-
-                    if let Ok(Some(age)) = age {
-                        // Convert the age to hours
-                        let age_in_hours = age.as_secs() / 3600;
-
-                        // Convert created_time to DateTime for formatting
-                        let created_datetime: DateTime<Utc> = DateTime::from(created_time);
-
-                        // Format the created datetime
-                        let created_date = created_datetime.format("%Y-%m-%d %H:%M:%S").to_string();
-
-                        println!("{} is {} hours old. Created on: {}", filename, age_in_hours, created_date);
-
-                        if age_in_hours >= 24 {
-                            println!("{} is old. This is where we should delete/redownload the cache.", filename);
-                            check_and_create_json("C:\\Users\\NinjaPC\\Downloads\\New Folder\\versions\\mods\\v0.1.26\\poop.json");
-                        } else {
-                            println!("{} is new. We can use it!!!", filename);
-                        }
-                    } else {
-                        println!("Failed to calculate the age of the file.");
-                    }
-                } else {
-                    println!("Failed to get current system time.");
-                }
-            } else {
-                println!("Failed to get file creation time.");
-            }
-        } else {
-            println!("Failed to get file metadata.");
-        }
-    } else {
-        println!("File {} does not exist.", filename);
-       check_and_create_json("C:\\Users\\NinjaPC\\Downloads\\New Folder\\versions\\mods\\v0.1.26\\poop.json"); 
-    }
-}
 
 
 use std::io::{self, prelude::*};

@@ -51,21 +51,6 @@ export async function downloadModVersion(
   return true;
 }
 
-export async function update_cache_if_need(
-  version: String,
-): Promise<boolean> {
-  try {
-    await invoke("update_cache_if_need", {
-      filename: version,
-    });
-  } catch (e) {
-    exceptionLog("Unable to download official version", e);
-    toastStore.makeToast("Unable to download version", "error");
-    return false;
-  }
-  return true;
-}
-
 
 export async function getcache(
   game_name: String,
