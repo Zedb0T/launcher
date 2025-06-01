@@ -19,6 +19,8 @@
   $: $modInfoStore, updateStyle();
 
   let style = "absolute object-fill h-screen brightness-75 pt-[60px] w-full";
+  let jak3Videostyle = "absolute top-0 left-0 w-full h-full object-cover brightness-75";
+
   let jak1Image = "";
   let onWindows = platform() !== "linux";
   let modBackground = "";
@@ -84,7 +86,7 @@
   {:else if $activeGame == SupportedGame.Jak3}
     {#if onWindows}
       <video
-        class={style}
+        class={jak3Videostyle}
         poster={jak3InProgressPoster}
         src={jak3InProgressVid}
         autoplay
