@@ -187,7 +187,8 @@ pub async fn does_active_tooling_version_support_game(
   let supported = match game_name.as_str() {
     "jak1" => true,
     "jak2" => tooling_version.minor >= 2,
-    "jak3" => tooling_version.minor >= 3,
+    //"jak3" => tooling_version.minor >= 3, Change this back of course before merging
+    "jak3" => true,
     _ => false,
   };
 
